@@ -1,18 +1,12 @@
 # WishNu Website Setup
 
-## Option B: Google Forms
+## Contact form: Google Form, spreadsheet, and email
 
-An email address does not create a Google Form. The form must be created and published from the owner's Google account.
+The native website form calls a deployed Google Apps Script Web App. Its JSONP status response allows the page to show success only when the handler reports that the form response, spreadsheet row, and notification email all completed; otherwise the form displays an error. The handler submits Name, Email, Address (project location), Phone number, and Comments to the provided Google Form, appends the enquiry to spreadsheet tab gid `298141766`, and emails `fairfield.pendleton@gmail.com`.
 
-1. Sign in to Google Forms as `abilash6377@gmail.com` and create a project enquiry form.
-2. Add Full Name, Email, Phone, Project Type, Project Location and Message. Make Full Name, Email, Project Type and Message required.
-3. Publish the form with responder access for anyone with the link. Leave the one-response limit and sign-in requirement off if you want all website visitors to be able to enquire.
-4. Use the form's More menu and choose Embed HTML. Older interfaces may have this under Send and the embed tab.
-5. Copy only the iframe's `src` URL into `GOOGLE_FORM_EMBED_URL` in `src/data.ts`. Use the published `docs.google.com/forms/.../viewform?embedded=true` URL, not the edit link or a `forms.gle` short link.
-6. In Responses, open the More menu and enable Get email notifications for new responses while signed in as `abilash6377@gmail.com`.
-7. Submit a test response and check both the form's Responses tab and the email inbox. Google notifications link to the responses; they do not necessarily include every answer in the email body.
+The current Web App endpoint is configured as `CONTACT_FORM_ENDPOINT` in `src/data.ts`. Its health-check URL responds that the contact endpoint is active. When changing `google-apps-script-contact-submitter.gs`, save and deploy a new version from the signed-in Google Apps Script project; do not create another project unless replacing the endpoint as well.
 
-Until the embed URL is supplied, the existing built-in contact form uses FormSubmit. Delivery through that service requires the account owner to activate it using the confirmation email. Email delivery has not been verified from this project.
+After deploying a new version, submit a real test enquiry and confirm it appears in Google Form responses and spreadsheet tab gid `298141766`, and that the notification arrives in the recipient inbox (check Spam as well). The Google Apps Script project must contain the latest contents of `google-apps-script-contact-submitter.gs` for the status confirmation to work.
 
 Google's current instructions:
 

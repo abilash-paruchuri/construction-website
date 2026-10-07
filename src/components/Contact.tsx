@@ -1,38 +1,101 @@
 import { useState, type FormEvent } from "react";
 import { CheckCircle2, Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
 import { Reveal, SectionTitle } from "./ui";
-import { COMPANY, GOOGLE_FORM_EMBED_URL } from "../data";
+import { COMPANY, CONTACT_FORM_ENDPOINT, CONTACT_NOTIFICATION_EMAIL } from "../data";
 
 const field =
   "w-full rounded-lg border border-gold/50 bg-cream/80 px-4 py-3 text-sm text-teal-deep outline-none transition-all duration-300 placeholder:text-teal-deep/40 focus:border-teal-brand focus:bg-white focus:shadow-[0_0_0_4px_rgba(199,154,43,0.25)]";
 
 type Status = "idle" | "sending" | "success" | "error";
+type SubmissionResult = { status: "pending" | "processing" | "success" | "error"; message?: string };
+
+function waitForSubmission(endpoint: string, requestId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const callbackName = `__wishnuSubmission_${requestId.replace(/-/g, "_")}`;
+    const deadline = Date.now() + 20000;
+    let timer: number | undefined;
+
+    const cleanup = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      delete (window as unknown as Record<string, unknown>)[callbackName];
+    };
+
+    const poll = () => {
+      if (Date.now() >= deadline) {
+        cleanup();
+        reject(new Error("Timed out waiting for the server to confirm the submission."));
+        return;
+      }
+
+      const script = document.createElement("script");
+      const callbackWindow = window as unknown as Record<string, (result: SubmissionResult) => void>;
+      callbackWindow[callbackName] = (result) => {
+        script.remove();
+        if (result.status === "success") {
+          cleanup();
+          resolve();
+        } else if (result.status === "error") {
+          cleanup();
+          reject(new Error(result.message || "The server could not complete the submission."));
+        } else {
+          timer = window.setTimeout(poll, 800);
+        }
+      };
+      script.onerror = () => {
+        script.remove();
+        cleanup();
+        reject(new Error("Could not check the submission status."));
+      };
+      script.src = `${endpoint}?requestId=${encodeURIComponent(requestId)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
+      document.head.appendChild(script);
+    };
+
+    poll();
+  });
+}
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const [submitError, setSubmitError] = useState("");
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status === "sending") return;
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    const normalizedData = {
+      ...data,
+      requestId: crypto.randomUUID(),
+      source: "wishnu-site",
+      submittedAt: new Date().toISOString(),
+    };
+
+    if (!CONTACT_FORM_ENDPOINT) {
+      setSubmitError("Online submission isn’t configured yet.");
+      setStatus("error");
+      return;
+    }
+
+    setSubmitError("");
     setStatus("sending");
+
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${COMPANY.email}`, {
+      const res = await fetch(CONTACT_FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          ...data,
-          _subject: `New enquiry from ${data.name} - WishNu Construction`,
-          _template: "table",
-          _captcha: "false",
-        }),
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(normalizedData),
       });
-      const result: { success?: boolean | string } = await res.json();
-      if (!res.ok || (result.success !== true && result.success !== "true")) throw new Error("failed");
+      if (res.type !== "opaque" && !res.ok) {
+        throw new Error("Submission endpoint returned an error.");
+      }
+
+      await waitForSubmission(CONTACT_FORM_ENDPOINT, normalizedData.requestId);
+
       form.reset();
       setStatus("success");
-    } catch {
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "The server could not confirm the submission.");
       setStatus("error");
     }
   };
@@ -96,31 +159,15 @@ export default function Contact() {
           {/* form */}
           <Reveal from="right" className="lg:col-span-3">
             <div className="frame h-full rounded-3xl p-6 md:p-10">
-              {GOOGLE_FORM_EMBED_URL ? (
-                <div className="relative">
-                  <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="font-display text-xl font-bold text-teal-brand">Your Hotel Project</h3>
-                    <a href={GOOGLE_FORM_EMBED_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-teal-soft underline underline-offset-4">
-                      Open Google Form in a new tab
-                    </a>
-                  </div>
-                  <iframe
-                    title="WishNu Hotel Project Enquiry Google Form"
-                    src={GOOGLE_FORM_EMBED_URL}
-                    className="h-[1100px] w-full border-0"
-                    loading="lazy"
-                  >
-                    Loading form...
-                  </iframe>
-                </div>
-              ) : status === "success" ? (
+              {status === "success" ? (
                 <div role="status" className="flex h-full min-h-[420px] flex-col items-center justify-center text-center">
                   <div className="animate-pop flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-gold-light to-gold text-teal-deep shadow-xl shadow-gold/40">
                     <CheckCircle2 size={52} />
                   </div>
                   <h3 className="font-display mt-6 text-2xl font-bold text-teal-brand">Thank you!</h3>
                   <p className="mt-2 max-w-sm text-teal-deep/75">
-                    Your enquiry has been submitted. For a time-sensitive project, you can also call us at {COMPANY.phone}.
+                    Your enquiry was recorded and the notification email was sent. {" "}
+                    For a time-sensitive project, you can also call us at {COMPANY.phone}.
                   </p>
                   <button onClick={() => setStatus("idle")} className="btn-outline font-display mt-6 rounded-full px-6 py-2.5 text-xs font-bold tracking-widest uppercase">
                     Send another message
@@ -140,7 +187,7 @@ export default function Contact() {
                     </label>
                     <label className="block">
                       <span className="font-display mb-1.5 block text-xs font-semibold tracking-widest text-teal-brand uppercase">Phone</span>
-                      <input name="phone" type="tel" autoComplete="tel" placeholder="(555) 123-4567" className={field} />
+                      <input required name="phone" type="tel" autoComplete="tel" placeholder="(555) 123-4567" className={field} />
                     </label>
                     <label className="block">
                       <span className="font-display mb-1.5 block text-xs font-semibold tracking-widest text-teal-brand uppercase">Project Type *</span>
@@ -169,8 +216,8 @@ export default function Contact() {
 
                   {status === "error" && (
                     <p role="alert" className="rounded-lg bg-maroon/10 px-4 py-3 text-sm text-maroon">
-                      Something went wrong. Please try again or email us at{" "}
-                      <a className="underline" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+                      {submitError || "We couldn’t send your enquiry."} Please try again or email us at{" "}
+                      <a className="underline" href={`mailto:${CONTACT_NOTIFICATION_EMAIL || COMPANY.email}`}>{CONTACT_NOTIFICATION_EMAIL || COMPANY.email}</a>.
                     </p>
                   )}
 

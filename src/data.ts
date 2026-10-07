@@ -10,7 +10,7 @@ export const COMPANY = {
   cityState: "Noblesville, IN",
   phone: "615-502-0282",
   phoneHref: "tel:+16155020282",
-  email: "abilash6377@gmail.com",
+  email: "fairfield.pendleton@gmail.com",
 };
 
 export const COMPANY_EXPERIENCE = {
@@ -18,11 +18,10 @@ export const COMPANY_EXPERIENCE = {
   completedProjects: 20,
 };
 
-// Option B: paste your published Google Form's iframe src here.
-// See SETUP.md for publishing and email-notification instructions.
-// Until configured, the existing FormSubmit form remains available;
-// its email delivery requires the owner's FormSubmit activation.
-export const GOOGLE_FORM_EMBED_URL = "";
+// Paste the deployed Google Apps Script Web App URL ending in /exec here.
+// The script submits the enquiry to the Google Form, spreadsheet, and email.
+export const CONTACT_FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbxySxaD9IGFtYW2Qq1I0jGoTrAFyB6KG3wKubmocz2AE0FBTvdOJ0bHPih08y_5QtS0/exec";
+export const CONTACT_NOTIFICATION_EMAIL = "fairfield.pendleton@gmail.com";
 
 // ----- Placeholder photos (swap with your own later) -----
 export const sites = [
