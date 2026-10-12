@@ -1,0 +1,2 @@
+export const field =
+  "w-full rounded-lg border border-gold/50 bg-cream/80 px-4 py-3 text-sm text-teal-deep outline-none transition-all duration-300 placeholder:text-teal-deep/40 focus:border-teal-brand focus:bg-white focus:shadow-[0_0_0_4px_rgba(199,154,43,0.25)]";

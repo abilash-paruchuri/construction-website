@@ -1,16 +1,21 @@
 // ====================================================================
-//  EASY-EDIT CONFIG - update these values whenever you need.
+// EASY-EDIT CONFIG
 // ====================================================================
 
 export const COMPANY = {
   name: "WishNu",
   tagline: "Construction & Development",
-  address: "14214 Bergen Blvd, Suite 150, Noblesville, IN 46060, United States",
-  addressLines: ["14214 Bergen Blvd, Suite 150", "Noblesville, IN 46060", "United States"],
+  address:
+    "14214 Bergen Blvd, Suite 150, Noblesville, IN 46060, United States",
+  addressLines: [
+    "14214 Bergen Blvd, Suite 150",
+    "Noblesville, IN 46060",
+    "United States",
+  ],
   cityState: "Noblesville, IN",
   phone: "615-502-0282",
   phoneHref: "tel:+16155020282",
-  email: "abilash6377@gmail.com",
+  email: "fairfield.pendleton@gmail.com",
 };
 
 export const COMPANY_EXPERIENCE = {
@@ -18,13 +23,24 @@ export const COMPANY_EXPERIENCE = {
   completedProjects: 20,
 };
 
-// Option B: paste your published Google Form's iframe src here.
-// See SETUP.md for publishing and email-notification instructions.
-// Until configured, the existing FormSubmit form remains available;
-// its email delivery requires the owner's FormSubmit activation.
+// ====================================================================
+// CONTACT FORM BACKEND
+// ====================================================================
+
+// Keep empty so the website uses our custom contact form.
 export const GOOGLE_FORM_EMBED_URL = "";
 
-// ----- Placeholder photos (swap with your own later) -----
+// New Google Apps Script deployment
+export const CONTACT_FORM_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbwt8W0NJTzfJ96eTt0I8WrN2ppIzs0jYP5hfpCNxfCXW4nSfPT7hUFXEGNNspDdKmK0Ag/exec";
+
+export const CONTACT_NOTIFICATION_EMAIL =
+  "fairfield.pendleton@gmail.com";
+
+// ====================================================================
+// PLACEHOLDER SITE PHOTOS
+// ====================================================================
+
 export const sites = [
   "https://images.pexels.com/photos/8961260/pexels-photo-8961260.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
   "https://images.pexels.com/photos/37687676/pexels-photo-37687676.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
@@ -48,12 +64,12 @@ export const portraits = {
   m6: portrait(26872232),
 };
 
-// ----- Team structure (placeholder names & photos — update later) -----
 export interface Person {
   name: string;
   role: string;
   img: string;
 }
+
 export interface Branch {
   head: Person;
   members: Person[];
@@ -67,24 +83,60 @@ export const ceo: Person = {
 
 export const branches: Branch[] = [
   {
-    head: { name: "Director Name", role: "Director of Construction", img: portraits.d1 },
+    head: {
+      name: "Director Name",
+      role: "Director of Construction",
+      img: portraits.d1,
+    },
     members: [
-      { name: "Team Member", role: "Senior Project Manager", img: portraits.m1 },
-      { name: "Team Member", role: "Site Superintendent", img: portraits.m3 },
+      {
+        name: "Team Member",
+        role: "Senior Project Manager",
+        img: portraits.m1,
+      },
+      {
+        name: "Team Member",
+        role: "Site Superintendent",
+        img: portraits.m3,
+      },
     ],
   },
   {
-    head: { name: "Director Name", role: "Director of Design & Renovation", img: portraits.d2 },
+    head: {
+      name: "Director Name",
+      role: "Director of Design & Renovation",
+      img: portraits.d2,
+    },
     members: [
-      { name: "Team Member", role: "Lead Architect", img: portraits.m2 },
-      { name: "Team Member", role: "Interior Design Lead", img: portraits.m4 },
+      {
+        name: "Team Member",
+        role: "Lead Architect",
+        img: portraits.m2,
+      },
+      {
+        name: "Team Member",
+        role: "Interior Design Lead",
+        img: portraits.m4,
+      },
     ],
   },
   {
-    head: { name: "Director Name", role: "Director of Operations", img: portraits.d3 },
+    head: {
+      name: "Director Name",
+      role: "Director of Operations",
+      img: portraits.d3,
+    },
     members: [
-      { name: "Team Member", role: "Safety & Compliance Manager", img: portraits.m5 },
-      { name: "Team Member", role: "Client Relations Manager", img: portraits.m6 },
+      {
+        name: "Team Member",
+        role: "Safety & Compliance Manager",
+        img: portraits.m5,
+      },
+      {
+        name: "Team Member",
+        role: "Client Relations Manager",
+        img: portraits.m6,
+      },
     ],
   },
 ];
