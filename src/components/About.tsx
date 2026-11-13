@@ -20,18 +20,14 @@ export default function About() {
           {/* images */}
           <Reveal from="left" className="relative mx-auto w-full max-w-lg pb-14">
             <Tilt max={6}>
-              <div className="rounded-t-[999px] bg-gradient-to-b from-gold-light to-gold p-1.5 shadow-2xl shadow-teal-deep/30">
+              <div className="overflow-hidden border border-teal-deep/10 bg-white p-1 shadow-xl shadow-black/10">
                 <PropertyPhoto
                   propertyId="bliss-kokomo"
-                  imageClassName="aspect-[4/5] w-full rounded-t-[999px]"
+                  imageClassName="aspect-[4/3] w-full object-cover"
                 />
               </div>
             </Tilt>
-            <div className="animate-float absolute -right-4 bottom-8 w-44 rounded-xl border-4 border-cream shadow-xl sm:-right-10 sm:w-56">
-              <PropertyPhoto propertyId="days-indianapolis" imageClassName="aspect-[4/3] rounded-lg" />
-            </div>
-            <div className="absolute -top-4 -left-4 h-24 w-24 rounded-full border-2 border-dashed border-gold animate-spin-slow" />
-            <p className="mt-5 max-w-[60%] text-[10px] leading-relaxed text-teal-deep/55">Bliss Point Inn, Kokomo / Published property photography. Photo sources are available in our portfolio.</p>
+            <p className="mt-3 text-xs leading-relaxed text-teal-deep/55">Bliss Point Inn, Kokomo · Published property photography</p>
           </Reveal>
 
           {/* copy */}

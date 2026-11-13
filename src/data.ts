@@ -43,7 +43,6 @@ export const CONTACT_NOTIFICATION_EMAIL =
 
 export const sites = [
   "https://images.pexels.com/photos/8961260/pexels-photo-8961260.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-  "https://images.pexels.com/photos/37687676/pexels-photo-37687676.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
   "https://images.pexels.com/photos/35300835/pexels-photo-35300835.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
   "https://images.pexels.com/photos/9964624/pexels-photo-9964624.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
 ];

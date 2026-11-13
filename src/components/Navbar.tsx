@@ -6,7 +6,6 @@ import { COMPANY } from "../data";
 const links = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "Experience" },
-  { href: "#team", label: "Our Team" },
   { href: "#services", label: "Services" },
   { href: "#projects", label: "Projects" },
   { href: "#results", label: "Results" },
@@ -34,24 +33,24 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5">
         <a href="#home" aria-label="WishNu Construction & Development">
-          <Logo />
+          <Logo light={!scrolled} />
         </a>
 
-        <nav aria-label="Main navigation" className="hidden items-center gap-5 xl:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-4 min-[1200px]:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="font-display group relative text-[11px] font-semibold tracking-wider text-teal-brand uppercase"
+              className={`font-display group relative text-[11px] font-semibold tracking-wider uppercase transition-colors ${scrolled ? "text-teal-brand" : "text-white"}`}
             >
               {l.label}
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gold transition-all duration-300 group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gold-light transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 xl:flex">
-          <a href={COMPANY.phoneHref} className="hidden items-center gap-2 text-sm font-medium text-teal-brand min-[1440px]:flex">
+        <div className="hidden items-center gap-4 min-[1200px]:flex">
+          <a href={COMPANY.phoneHref} className={`hidden items-center gap-2 text-sm font-medium min-[1440px]:flex ${scrolled ? "text-teal-brand" : "text-white"}`}>
             <Phone size={16} className="text-gold" /> {COMPANY.phone}
           </a>
           <a href="#contact" className="btn-gold font-display rounded-full px-6 py-2.5 text-xs font-bold tracking-widest uppercase">
@@ -60,7 +59,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className="rounded-lg p-2 text-teal-brand xl:hidden"
+          className={`rounded-lg p-2 min-[1200px]:hidden ${scrolled ? "text-teal-brand" : "text-white"}`}
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
           aria-expanded={open}
@@ -73,7 +72,7 @@ export default function Navbar() {
       <div
         id="mobile-navigation"
         inert={!open}
-        className={`overflow-hidden bg-cream/95 backdrop-blur-md transition-all duration-500 xl:hidden ${
+        className={`overflow-hidden bg-cream/95 backdrop-blur-md transition-all duration-500 min-[1200px]:hidden ${
           open ? "max-h-[560px] border-t border-gold/40" : "max-h-0"
         }`}
       >

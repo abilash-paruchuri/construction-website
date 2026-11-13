@@ -1,6 +1,6 @@
 export function LogoMark({ className = "" }: { className?: string }) {
   const gold = "#c79a2b";
-  const teal = "#0e4b5c";
+  const teal = "#6f2631";
   return (
     <svg viewBox="0 0 200 215" className={className} fill="none">
       {/* outer arc */}

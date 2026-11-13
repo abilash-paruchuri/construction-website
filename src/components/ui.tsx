@@ -4,9 +4,9 @@ type From = "up" | "left" | "right" | "zoom" | "none";
 
 const hiddenMap: Record<From, string> = {
   up: "translate-y-12",
-  left: "-translate-x-14",
-  right: "translate-x-14",
-  zoom: "scale-90",
+  left: "-translate-x-12",
+  right: "translate-x-12",
+  zoom: "scale-[0.97]",
   none: "",
 };
 
@@ -46,8 +46,9 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      data-reveal={seen ? "visible" : "pending"}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-1000 ease-out ${
+      className={`cinematic-reveal transition-all duration-1000 ease-[cubic-bezier(0.2,0.75,0.2,1)] ${
         seen ? "opacity-100 translate-x-0 translate-y-0 scale-100" : `opacity-0 ${hiddenMap[from]}`
       } ${className}`}
     >
@@ -148,15 +149,14 @@ export function SectionTitle({
 }) {
   return (
     <Reveal className={center ? "text-center" : ""}>
-      <p className="font-serif-i text-xl italic tracking-wide text-gold md:text-2xl">{eyebrow}</p>
+      <p className="text-xs font-semibold tracking-[0.16em] text-teal-soft uppercase">{eyebrow}</p>
       <h2
-        className={`font-display mt-2 text-3xl font-bold leading-tight md:text-5xl ${
+        className={`section-heading font-display mt-3 text-3xl font-semibold leading-tight tracking-tight md:text-5xl ${
           light ? "text-cream" : "text-teal-brand"
         }`}
       >
         {title}
       </h2>
-      <Ornament light={light} className={`mt-4 ${center ? "mx-auto" : ""}`} />
     </Reveal>
   );
 }

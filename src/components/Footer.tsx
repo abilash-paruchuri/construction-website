@@ -1,12 +1,10 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "./Logo";
-import { Ornament } from "./ui";
 import { COMPANY, COMPANY_EXPERIENCE } from "../data";
 
 const links = [
   { label: "Home", href: "#home" },
   { label: "Our Experience", href: "#about" },
-  { label: "Our Team", href: "#team" },
   { label: "Services", href: "#services" },
   { label: "Project Portfolio", href: "#projects" },
   { label: "Renovation Impact", href: "#results" },
@@ -17,7 +15,7 @@ const links = [
 export default function Footer({ onReplayWelcome }: { onReplayWelcome?: () => void }) {
   return (
     <footer className="relative bg-teal-deep text-cream">
-      <div className="h-2 bg-[repeating-linear-gradient(90deg,#c79a2b_0_14px,#06303b_14px_20px,#ecd079_20px_34px,#06303b_34px_40px)]" />
+      <div className="h-1 bg-gold" />
       <div className="mx-auto max-w-7xl px-5 py-14">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
@@ -29,8 +27,7 @@ export default function Footer({ onReplayWelcome }: { onReplayWelcome?: () => vo
           </div>
 
           <div>
-            <h4 className="font-display text-sm font-bold tracking-widest text-gold-light uppercase">Quick Links</h4>
-            <Ornament light className="mt-2 !w-32" />
+            <h4 className="text-xs font-semibold tracking-[0.14em] text-gold-light uppercase">Quick Links</h4>
             <ul className="mt-4 space-y-2 text-sm text-cream/80">
               {links.map((link) => (
                 <li key={link.href}>
@@ -43,8 +40,7 @@ export default function Footer({ onReplayWelcome }: { onReplayWelcome?: () => vo
           </div>
 
           <div>
-            <h4 className="font-display text-sm font-bold tracking-widest text-gold-light uppercase">Reach Us</h4>
-            <Ornament light className="mt-2 !w-32" />
+            <h4 className="text-xs font-semibold tracking-[0.14em] text-gold-light uppercase">Reach Us</h4>
             <ul className="mt-4 space-y-3 text-sm text-cream/80">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="mt-0.5 shrink-0 text-gold" />

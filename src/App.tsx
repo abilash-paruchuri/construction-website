@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import SiteMotion from "./components/SiteMotion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Marquee from "./components/Marquee";
 import About from "./components/About";
-import Team from "./components/Team";
 import Services from "./components/Services";
 import Projects from "./components/Projects";
 import RenovationImpact from "./components/RenovationImpact";
@@ -45,20 +45,21 @@ export default function App() {
     return () => window.removeEventListener("scroll", on);
   }, [showWelcome]);
 
-  if (showWelcome) return <WelcomeScreen onEnter={enterWebsite} />;
-
   return (
+    <>
+    {showWelcome && <WelcomeScreen onEnter={enterWebsite} />}
+    <div inert={showWelcome} aria-hidden={showWelcome || undefined}>
     <div className="min-h-screen">
       <div
         className="fixed top-0 left-0 z-[60] h-1 w-full origin-left bg-gradient-to-r from-gold via-gold-light to-gold"
         style={{ transform: `scaleX(${progress})` }}
       />
+      <SiteMotion />
       <Navbar />
       <main>
         <Hero />
         <Marquee />
         <About />
-        <Team />
         <Services />
         <Projects />
         <RenovationImpact />
@@ -78,5 +79,7 @@ export default function App() {
         <ArrowUp size={20} />
       </a>
     </div>
+    </div>
+    </>
   );
 }

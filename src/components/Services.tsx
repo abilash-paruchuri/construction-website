@@ -1,5 +1,5 @@
 import { Building2, Paintbrush, ClipboardCheck, Hammer, HardHat, DoorOpen } from "lucide-react";
-import { Reveal, SectionTitle, Tilt, Mandala } from "./ui";
+import { Reveal, SectionTitle } from "./ui";
 
 const services = [
   {
@@ -37,27 +37,20 @@ const services = [
 export default function Services() {
   return (
     <section id="services" className="relative overflow-hidden bg-teal-deep py-20 lg:py-28">
-      <Mandala className="animate-spin-slow absolute -top-60 left-1/2 w-[1100px] -translate-x-1/2 opacity-[0.08]" stroke="#ecd079" />
       <div className="relative mx-auto max-w-7xl px-5">
         <SectionTitle eyebrow="What We Do" title="Our Construction Services" light />
 
-        <div className="mt-14 grid gap-7 [perspective:1200px] sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
-            <Reveal key={s.title} delay={(i % 3) * 140} from="zoom">
-              <Tilt max={14}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-gold/50 bg-gradient-to-br from-teal-brand/80 to-teal-deep p-7 shadow-xl shadow-black/30">
-                  <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gold/10 transition-all duration-700 group-hover:scale-[3]" />
-                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-gold bg-teal-deep text-gold-light transition-transform duration-700 group-hover:rotate-[360deg]">
-                    <s.icon size={28} />
-                  </div>
-                  <h3 className="font-display relative mt-5 text-lg font-bold tracking-wide text-cream">{s.title}</h3>
-                  <p className="relative mt-3 text-sm leading-relaxed text-cream/75">{s.text}</p>
-                  <div className="relative mt-5 h-0.5 w-10 bg-gold transition-all duration-500 group-hover:w-full" />
-                  <span className="font-display absolute right-5 bottom-3 text-5xl font-black text-gold/10">
-                    0{i + 1}
-                  </span>
+            <Reveal key={s.title} delay={(i % 3) * 100}>
+              <article className="group h-full border-t border-white/20 py-7 transition-colors hover:border-gold-light">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-xs font-semibold tracking-widest text-gold-light">0{i + 1}</span>
+                  <s.icon size={20} strokeWidth={1.6} className="text-white/75 transition-transform group-hover:translate-x-1" />
                 </div>
-              </Tilt>
+                <h3 className="mt-6 text-lg font-semibold tracking-tight text-white">{s.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/70">{s.text}</p>
+              </article>
             </Reveal>
           ))}
         </div>

@@ -29,7 +29,7 @@ export default function WelcomeScreen({ onEnter }: { onEnter: () => void }) {
     leavingRef.current = true;
     setEntering(true);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    timerRef.current = window.setTimeout(onEnter, reduced ? 0 : 700);
+    timerRef.current = window.setTimeout(onEnter, reduced ? 0 : 1250);
   }, [onEnter]);
 
   useEffect(() => {

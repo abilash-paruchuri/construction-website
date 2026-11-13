@@ -1,114 +1,158 @@
-import { ArrowRight } from "lucide-react";
-import Hero3D from "./Hero3D";
-import { Mandala } from "./ui";
+import { useEffect, useState } from "react";
+import { ArrowDown, ArrowRight, Pause, Play } from "lucide-react";
 import { COMPANY_EXPERIENCE } from "../data";
+import PropertyPhoto from "./PropertyPhoto";
 
-const words = ["Modern", "Hotels.", "Timeless", "Craft."];
+type Feature = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  label: string;
+  year?: number;
+  constructionImage?: string;
+  imageAlt?: string;
+  controlLabel?: string;
+};
+
+const propertyFeatures: Feature[] = [
+  {
+    id: "bliss-kokomo",
+    eyebrow: "Hotel renovation & reopening · Kokomo, Indiana",
+    title: "Ready to welcome guests again.",
+    description:
+      "From planning and building systems to the final fit-out, we help hotel owners take on the work behind a successful reopening.",
+    label: "Bliss Point Inn",
+    year: 2024,
+  },
+  {
+    id: "super8-fort-wayne",
+    eyebrow: "Major renovation · Fort Wayne, Indiana",
+    title: "A better stay starts with the details.",
+    description:
+      "Room finishes, bathrooms, lighting and building systems all shape a guest's stay. We coordinate the renovation work from scope through fit-out.",
+    label: "Super 8",
+    year: 2024,
+  },
+  {
+    id: "days-indianapolis",
+    eyebrow: "Full renovation · Indianapolis, Indiana",
+    title: "Better stays start with the details.",
+    description:
+      "Guest rooms, bathrooms, finishes and building systems all shape the experience. We bring the pieces together from first scope to handover.",
+    label: "Days Inn",
+    year: 2021,
+  },
+  {
+    id: "red-roof-perrysburg",
+    eyebrow: "Construction completion · Perrysburg, Ohio",
+    title: "Make unfinished work move forward.",
+    description:
+      "When a project needs a clear path to opening, we coordinate the remaining design, approvals, construction and guest-ready fit-out.",
+    label: "Red Roof Inn",
+    year: 2019,
+  },
+];
+
+const features = propertyFeatures;
 
 export default function Hero() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const feature = features[active];
+  const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    if (paused || reducedMotion) return;
+    const timer = window.setInterval(() => {
+      setActive((current) => (current + 1) % features.length);
+    }, 7500);
+    return () => window.clearInterval(timer);
+  }, [paused, reducedMotion]);
+
   return (
-    <section id="home" className="relative overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-24">
-      {/* backdrop */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 -right-40 h-[720px] w-[720px] opacity-[0.10]">
-          <Mandala className="animate-spin-slow h-full w-full" />
-        </div>
-        <div className="absolute -bottom-52 -left-52 h-[600px] w-[600px] opacity-[0.12]">
-          <Mandala className="animate-spin-rev h-full w-full" stroke="#0e4b5c" />
-        </div>
-        <div className="animate-glow absolute top-1/3 left-1/4 h-72 w-72 rounded-full bg-gold-light/40 blur-3xl" />
-        {[...Array(5)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute h-2 w-2 rotate-45 bg-gold/70"
-            style={{
-              left: `${8 + i * 9}%`,
-              bottom: `${5 + ((i * 17) % 30)}%`,
-              animation: `drift ${7 + (i % 4)}s ease-in infinite`,
-              animationDelay: `${i * 0.9}s`,
-            }}
+    <section id="home" className="home-stage relative isolate min-h-[720px] overflow-hidden bg-teal-deep text-white">
+      <div key={feature.id} className="home-stage-image absolute inset-0 -z-10">
+        {feature.constructionImage ? (
+          <img
+            src={feature.constructionImage}
+            alt={feature.imageAlt}
+            loading={active === 0 ? "eager" : "lazy"}
+            fetchPriority={active === 0 ? "high" : "auto"}
+            decoding="async"
+            className="h-full w-full object-cover"
           />
-        ))}
+        ) : (
+          <PropertyPhoto
+            propertyId={feature.id}
+            loading={active === 0 ? "eager" : "lazy"}
+            className="h-full w-full"
+            imageClassName="h-full w-full"
+            showCaption={false}
+            allowRepresentativeFallback={false}
+          />
+        )}
+      </div>
+      <div className="home-stage-overlay pointer-events-none absolute inset-0 -z-[5]" />
+
+      <div className="home-editorial mx-auto max-w-[1440px] px-6 sm:px-12">
+        <p className="home-kicker"><span /> Hospitality construction · Since 2013</p>
+        <h1 id="home-title" tabIndex={-1} className="home-headline outline-none">Building places.<br /><span>Elevating stays.</span></h1>
+        <a href="#projects" className="home-editorial-link">Explore our portfolio <ArrowRight size={20} /></a>
+      </div>
+      <div className="home-slide-number" aria-hidden="true">0{active + 1}<span> / 0{features.length}</span></div>
+      <div className="home-intro-panel absolute inset-x-0 bottom-0 mx-auto grid max-w-[1440px] grid-cols-1 md:grid-cols-[1.12fr_1fr_0.72fr_0.62fr]">
+        <div className="home-intro-primary flex min-h-[220px] flex-col justify-center px-6 py-7 sm:px-10 lg:min-h-[270px] lg:px-14">
+          <p className="home-intro-eyebrow">{feature.eyebrow}</p>
+          <h2 key={`${feature.id}-title`} className="home-intro-title mt-3 max-w-[13ch] outline-none">
+            {feature.title}
+          </h2>
+        </div>
+
+        <div className="home-intro-description flex flex-col justify-center px-6 py-7 sm:px-10 lg:px-12">
+          <p key={`${feature.id}-description`} className="home-description-copy">
+            {feature.description}
+          </p>
+          <a href="#projects" className="home-project-link mt-5 inline-flex w-fit items-center gap-2">
+            See our work <ArrowRight size={16} aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="home-intro-stat flex items-center gap-4 px-6 py-5 sm:px-10 md:flex-col md:items-start md:justify-center lg:px-8">
+          <span className="home-stat-number">{COMPANY_EXPERIENCE.completedProjects}</span>
+          <span className="home-stat-label">hotel projects<br />since {COMPANY_EXPERIENCE.since}</span>
+        </div>
+
+        <a href="#about" className="home-discover flex min-h-[76px] items-center justify-between gap-5 px-6 py-5 sm:px-10 md:min-h-0 md:flex-col md:items-start md:justify-center lg:px-8">
+          <span>Discover<br className="hidden md:block" /> WishNu</span>
+          <ArrowDown className="home-discover-arrow" size={22} aria-hidden="true" />
+        </a>
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-2">
-        {/* copy */}
-        <div>
-          <p className="font-serif-i animate-pop text-xl text-gold italic md:text-2xl">
-            Hotel Construction &amp; Renovation
-          </p>
-          <h1 id="home-title" tabIndex={-1} className="hero-word font-display mt-4 text-[clamp(4.5rem,8vw,7.5rem)] leading-none font-black tracking-tight text-teal-brand outline-none" style={{ animationDelay: "0.1s" }}>
-            Wish<span className="text-gold">N</span>u
-            <span className="mt-3 block text-[10px] font-semibold tracking-[0.28em] sm:text-xs">
-              CONSTRUCTION &amp; DEVELOPMENT
-            </span>
-          </h1>
-          <p className="font-display mt-7 text-3xl leading-[1.2] font-bold text-teal-brand sm:text-4xl xl:text-[2.6rem] [perspective:800px]">
-            {words.map((w, i) => (
-              <span
-                key={i}
-                className={`hero-word mr-3 ${i >= 2 ? "text-gold-grad" : ""}`}
-                style={{ animationDelay: `${0.25 + i * 0.12}s` }}
-              >
-                {w}
-              </span>
-            ))}
-          </p>
-          <p
-            className="hero-word mt-6 max-w-xl text-base leading-relaxed text-teal-deep/80 md:text-lg"
-            style={{ animationDelay: "1.1s" }}
-          >
-            Revitalizing hotels since {COMPANY_EXPERIENCE.since}, from complete renovations and property reopenings to our next chapter
-            in ground-up construction.
-          </p>
-
-          <div className="hero-word mt-8 flex flex-wrap items-center gap-4" style={{ animationDelay: "1.3s" }}>
-            <a
-              href="#contact"
-              className="btn-gold font-display inline-flex items-center gap-2 rounded-full px-8 py-4 text-xs font-bold tracking-widest uppercase"
-            >
-              Start Your Project <ArrowRight size={16} />
-            </a>
-            <a
-              href="#projects"
-              className="font-display inline-flex items-center gap-2 px-2 py-4 text-xs font-bold tracking-widest text-teal-brand uppercase transition-colors hover:text-gold"
-            >
-              Explore Our Projects <ArrowRight size={15} />
-            </a>
-          </div>
+      <div className="home-feature-controls absolute right-6 bottom-[calc(100%+22px)] z-10 flex items-center gap-3 sm:right-10 lg:right-[max(calc((100vw-1440px)/2+48px),48px)]">
+          <span className="home-feature-label">
+            {feature.year ? `${feature.label} · ${feature.year} portfolio entry` : feature.label}
+          </span>
+        <div className="flex items-center gap-2" role="group" aria-label="Featured project photos">
+          {features.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-label={`Show ${item.controlLabel ?? item.label}`}
+              aria-pressed={active === index}
+              onClick={() => setActive(index)}
+              className={`home-feature-dot ${active === index ? "is-current" : ""}`}
+            />
+          ))}
         </div>
-
-        {/* 3D arch */}
-        <div className="relative mx-auto w-full max-w-[520px]">
-          {/* sun behind arch */}
-          <div className="pointer-events-none absolute -top-16 left-1/2 h-40 w-40 -translate-x-1/2">
-            <svg viewBox="0 0 200 200" className="animate-spin-slow h-full w-full">
-              {Array.from({ length: 24 }).map((_, i) => (
-                <polygon
-                  key={i}
-                  points="100,0 106,34 94,34"
-                  fill="#c79a2b"
-                  transform={`rotate(${i * 15} 100 100)`}
-                />
-              ))}
-            </svg>
-            <div className="absolute inset-[22%] rounded-full bg-gradient-to-b from-gold-light to-gold shadow-[0_0_60px_10px_rgba(236,208,121,0.7)]" />
-          </div>
-
-          <div className="relative rounded-t-[999px] bg-gradient-to-b from-gold-light via-gold to-gold p-[5px] shadow-2xl shadow-teal-deep/40">
-            <div className="rounded-t-[999px] bg-cream p-[5px]">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] bg-gradient-to-b from-teal-deep via-teal-brand to-teal-soft">
-                {/* inner glow */}
-                <div className="animate-glow absolute top-[8%] left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-gold-light/40 blur-3xl" />
-                <Mandala className="animate-spin-slow absolute top-[3%] left-1/2 w-[90%] -translate-x-1/2 opacity-25" stroke="#ecd079" />
-                <Hero3D />
-                <div className="font-display absolute bottom-3 left-0 w-full text-center text-[10px] tracking-[0.35em] text-gold-light/80 uppercase">
-                  Move your cursor to explore
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button
+          type="button"
+          className="home-feature-toggle"
+          onClick={() => setPaused((value) => !value)}
+          aria-label={paused ? "Play featured photos" : "Pause featured photos"}
+        >
+          {paused ? <Play size={14} fill="currentColor" /> : <Pause size={14} />}
+        </button>
       </div>
     </section>
   );

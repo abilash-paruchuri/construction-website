@@ -1,15 +1,14 @@
 import { ArrowRight } from "lucide-react";
-import { Mandala, Reveal } from "./ui";
+import { Reveal } from "./ui";
 import { COMPANY_EXPERIENCE } from "../data";
 
 export default function Expansion() {
   return (
     <section id="development" className="relative overflow-hidden border-y border-gold/40 bg-teal-deep py-20 lg:py-24">
-      <Mandala stroke="#ecd079" className="animate-spin-slow pointer-events-none absolute -top-36 -right-24 h-[650px] w-[650px] opacity-[0.08]" />
       <div className="relative mx-auto max-w-7xl px-5">
         <Reveal className="max-w-3xl">
-          <p className="font-serif-i text-xl text-gold-light italic">Expanding Horizons</p>
-          <h2 className="font-display mt-3 text-3xl font-bold leading-tight text-cream md:text-5xl">From Revitalization to Ground-Up Construction</h2>
+          <p className="text-xs font-semibold tracking-[0.16em] text-gold-light uppercase">What's next</p>
+          <h2 className="font-display mt-3 text-3xl font-semibold leading-tight tracking-tight text-cream md:text-5xl">From Revitalization to Ground-Up Construction</h2>
           <p className="mt-6 max-w-2xl text-sm leading-relaxed text-cream/80 md:text-base">
             With more than a decade of hospitality experience and {COMPANY_EXPERIENCE.completedProjects} completed hotel projects since {COMPANY_EXPERIENCE.since},
             WishNu is expanding into ground-up hotel construction. Our knowledge of building systems,
